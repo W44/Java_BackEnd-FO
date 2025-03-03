@@ -3,6 +3,7 @@ import com.example.demo.Interfaces.IUsersDBRepository;
 import com.example.demo.Models.AuthRequest;
 import com.example.demo.Models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
 
 
 @RestController
@@ -49,7 +52,7 @@ public class AuthController {
 
     @CrossOrigin(origins = "*")
     @PostMapping("/authenticate")
-    public String generateToken(@RequestBody AuthRequest authRequest) {
+    public ResponseEntity<Map<String, String>> generateToken(@RequestBody AuthRequest authRequest) {
              String username = authRequest.getUsername();
              String password = /*passwordEncoder.encode(*/authRequest.getPassword();/*);*/
         try {
@@ -60,6 +63,11 @@ public class AuthController {
         }
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        return jwtUtil.generateToken(userDetails.getUsername());
+        String token = jwtUtil.generateToken(userDetails.getUsername());
+
+    Map<String, String> response = new HashMap<>();
+    response.put("token", token);
+
+    return ResponseEntity.ok(response);
     }
 }
