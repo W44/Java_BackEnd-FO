@@ -48,7 +48,7 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtRequestFilt
     http
             .cors(cors -> cors.configurationSource(request -> {
             CorsConfiguration config = new CorsConfiguration();
-            config.setAllowedOrigins(List.of("*"));
+            config.setAllowedOriginPatterns(List.of("*"));
             config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
             config.setAllowedHeaders(List.of("*"));
             config.setAllowCredentials(true);

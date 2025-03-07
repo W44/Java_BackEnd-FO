@@ -14,14 +14,14 @@ import java.util.List;
 @Configuration
 public class OrderConfig {
 
-    @Bean
-    CommandLineRunner commandLineRunner(IOrderDBRepository repository ){
-
-        return args -> {
-             OrderModel test = new OrderModel("tester",44L,"testing description", LocalDate.now());
-             OrderModel test2 = new OrderModel("tester2",88L,"testing description of 2", LocalDate.of(2024, Month.JULY,14));
-
-             repository.saveAll(List.of(test,test2));
-        };
-    }
+//    @Bean
+//    CommandLineRunner commandLineRunner(IOrderDBRepository repository ){
+//
+//        return args -> {
+//             OrderModel test = new OrderModel("tester",44L,"testing description", LocalDate.now());
+//             OrderModel test2 = new OrderModel("tester2",88L,"testing description of 2", LocalDate.of(2024, Month.JULY,14));
+//
+//             repository.saveAll(List.of(test,test2));
+//        };
+//    }
 }
