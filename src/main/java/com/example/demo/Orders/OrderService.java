@@ -1,67 +1,78 @@
 package com.example.demo.Orders;
 
+import com.example.demo.DTO.OrderRequestDto;
 import com.example.demo.Interfaces.IOrderDBRepository;
+import com.example.demo.Interfaces.IUsersDBRepository;
 import com.example.demo.Models.OrderModel;
+import com.example.demo.Models.User;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class OrderService {
 
-    final IOrderDBRepository IOrderDBRepository;
+    private final IOrderDBRepository orderRepository;
+    private final IUsersDBRepository userRepository;  // Inject User repository
 
     @Autowired
-    public OrderService(IOrderDBRepository IOrderDBRepository) {
-        this.IOrderDBRepository = IOrderDBRepository;
+    public OrderService(IOrderDBRepository orderRepository, IUsersDBRepository userRepository) {
+        this.orderRepository = orderRepository;
+        this.userRepository = userRepository;
+    }
+     public List<OrderModel> getAllOrders() {
+        return orderRepository.findAll();
     }
 
-
-    public List<OrderModel> getOrder() {
-        return IOrderDBRepository.findAll();
+    public List<OrderModel> getOrdersByUser(Integer userId) {
+        return orderRepository.findByUser_Id(userId);
     }
 
-    public void addNewOrder(OrderModel order) {
-        Optional<OrderModel> orderModelOptional = IOrderDBRepository.findOrderByPrice(order.getPrice());
+    public void addNewOrder(OrderRequestDto orderRequest) {
+        //        Optional<OrderModel> orderModelOptional = IOrderDBRepository.findOrderByPrice(order.getPrice());
+//
+//        if (orderModelOptional.isPresent())
+//        {
+//            throw new IllegalStateException("Same price Order already Present");
+//        }
+        User user = userRepository.findById(orderRequest.getUserId())
+                .orElseThrow(() -> new IllegalStateException("User not found with ID: " + orderRequest.getUserId()));
 
-        if (orderModelOptional.isPresent())
-        {
-            throw new IllegalStateException("Same price Order already Present");
+        OrderModel order = new OrderModel(
+                orderRequest.getName(),
+                orderRequest.getPrice(),
+                orderRequest.getDescription(),
+                orderRequest.getDate(),
+                user,
+                orderRequest.getIsactive()
+        );
+
+        orderRepository.save(order);
+    }
+
+   public void deleteOrder(Long id) {
+        boolean exists = orderRepository.existsById(id);
+        if (!exists) {
+            throw new IllegalStateException("No order with ID: " + id + " exists");
         }
-         IOrderDBRepository.save(order);
-    }
-
-    public void deleteOrder(Long id) {
-        Boolean orderExist = IOrderDBRepository.existsById(id);
-        if (!orderExist)
-        {
-            throw new IllegalStateException("No oder with ID:"+ id +" exists");
-        }
-        IOrderDBRepository.deleteById(id);
+        orderRepository.deleteById(id);
     }
 
     @Transactional
-    public void updateOrder(Long id, String name, Long price, String description) {
-        OrderModel orderModel = IOrderDBRepository.findById(id).orElseThrow(() -> new IllegalStateException("Order with ID:" + id + " does not exists"));
+    public void updateOrder(Long id, OrderRequestDto orderRequest) {
+        OrderModel order = orderRepository.findById(id)
+                .orElseThrow(() -> new IllegalStateException("Order with ID: " + id + " does not exist"));
 
-
-        if (name != null && name.length() > 0 && !Objects.equals(name,orderModel.getPrice()))
-        {
-            orderModel.setName(name);
+        if (orderRequest.getName() != null && !orderRequest.getName().isEmpty()) {
+            order.setName(orderRequest.getName());
         }
-        if (price != null && price > 0 && !Objects.equals(price,orderModel.getPrice()))
-        {
-            orderModel.setPrice(price);
+        if (orderRequest.getPrice() != null && orderRequest.getPrice() > 0) {
+            order.setPrice(orderRequest.getPrice());
         }
-        if (description != null && description.length() > 0 && !Objects.equals(description,orderModel.getDescription()))
-        {
-            orderModel.setDescription(description);
+        if (orderRequest.getDescription() != null && !orderRequest.getDescription().isEmpty()) {
+            order.setDescription(orderRequest.getDescription());
         }
-
-
     }
 }

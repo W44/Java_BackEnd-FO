@@ -3,10 +3,11 @@
 /Users/macbook/Desktop/demo/Java_BackEnd-FO/src/main/java/com/example/demo/Authentication/JwtRequestFilter.java
 /Users/macbook/Desktop/demo/Java_BackEnd-FO/src/main/java/com/example/demo/Authentication/JwtUtil.java
 /Users/macbook/Desktop/demo/Java_BackEnd-FO/src/main/java/com/example/demo/Authentication/SecurityConfig.java
+/Users/macbook/Desktop/demo/Java_BackEnd-FO/src/main/java/com/example/demo/DTO/AuthRequestDto.java
+/Users/macbook/Desktop/demo/Java_BackEnd-FO/src/main/java/com/example/demo/DTO/OrderRequestDto.java
 /Users/macbook/Desktop/demo/Java_BackEnd-FO/src/main/java/com/example/demo/DemoApplication.java
 /Users/macbook/Desktop/demo/Java_BackEnd-FO/src/main/java/com/example/demo/Interfaces/IOrderDBRepository.java
 /Users/macbook/Desktop/demo/Java_BackEnd-FO/src/main/java/com/example/demo/Interfaces/IUsersDBRepository.java
-/Users/macbook/Desktop/demo/Java_BackEnd-FO/src/main/java/com/example/demo/Models/AuthRequest.java
 /Users/macbook/Desktop/demo/Java_BackEnd-FO/src/main/java/com/example/demo/Models/OrderModel.java
 /Users/macbook/Desktop/demo/Java_BackEnd-FO/src/main/java/com/example/demo/Models/User.java
 /Users/macbook/Desktop/demo/Java_BackEnd-FO/src/main/java/com/example/demo/Orders/OrderConfig.java

@@ -1,17 +1,15 @@
 package com.example.demo.Models;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
 import java.time.Period;
 
-
 @Entity
-@Table
+@Table(name = "orders")
 public class OrderModel {
     @Id
     @SequenceGenerator(
-            name="order_sequence",
+            name = "order_sequence",
             sequenceName = "order_sequence",
             allocationSize = 1
     )
@@ -24,25 +22,44 @@ public class OrderModel {
     private Long price;
     private String description;
     private LocalDate date;
+
+    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
+    private boolean isactive;
+
+
     @Transient
     private long daysordered;
 
-    public OrderModel() {
-    }
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
+    private User user;
 
-    public OrderModel(Long id, String name, Long price, String description, LocalDate date) {
+    public OrderModel() {}
+
+    public OrderModel(Long id, String name, Long price, String description, LocalDate date, User user, Boolean isactive) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.description = description;
         this.date = date;
+        this.user = user;
+        this.isactive=isactive;
     }
 
-    public OrderModel(String name, Long price, String description, LocalDate date) {
+    public OrderModel(String name, Long price, String description, LocalDate date, User user, Boolean isactive) {
         this.name = name;
         this.price = price;
         this.description = description;
         this.date = date;
+        this.user = user;
+        this.isactive=isactive;
+    }
+
+     public void setIsactive(boolean isactive) {
+        this.isactive = isactive;
+    }
+    public boolean getIsactive() {
+        return isactive;
     }
 
     public Long getId() {
@@ -93,6 +110,17 @@ public class OrderModel {
         this.daysordered = daysordered;
     }
 
+    public User getUser() {
+        return user;
+    }
+    public Integer getUserId() { return user.getId(); }
+
+    public String getUsername() { return user.getUsername(); }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     @Override
     public String toString() {
         return "OrderModel{" +
@@ -101,6 +129,7 @@ public class OrderModel {
                 ", price=" + price +
                 ", description='" + description + '\'' +
                 ", date=" + date +
+                ", user=" + user.getUsername() +
                 '}';
     }
 }

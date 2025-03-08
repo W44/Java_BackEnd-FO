@@ -1,6 +1,6 @@
 package com.example.demo.Models;
-
 import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "\"user\"")
@@ -10,9 +10,14 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(unique = true, nullable = false)
     private String username;
+
+    @Column(nullable = false)
     private String password;
-   /* private String role;*/
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderModel> orders;
 
     public Integer getId() {
         return id;
@@ -38,11 +43,11 @@ public class User {
         this.password = password;
     }
 
-    /*public String getRole() {
-        return role;
+    public List<OrderModel> getOrders() {
+        return orders;
     }
 
-    public void setRole(String role) {
-        this.role = role;
-    }*/
+    public void setOrders(List<OrderModel> orders) {
+        this.orders = orders;
+    }
 }

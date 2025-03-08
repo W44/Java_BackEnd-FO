@@ -1,12 +1,15 @@
 package com.example.demo.Orders;
 
 
+import com.example.demo.DTO.OrderRequestDto;
 import com.example.demo.Models.OrderModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(path = "api/v1/order")
@@ -20,18 +23,36 @@ public class OrderController {
     }
 
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    @GetMapping
-    public List<OrderModel> getOrder() {
-        return orderService.getOrder();
+@GetMapping
+public List<Map<String, Object>> getOrders(@RequestParam(required = false) Integer userId) {
+    List<OrderModel> orders;
 
+    if (userId != null) {
+        orders = orderService.getOrdersByUser(userId);
+    } else {
+        orders = orderService.getAllOrders();
     }
+    return orders.stream().map(order -> {
+        Map<String, Object> response = new HashMap<>();
+        response.put("id", order.getId());
+        response.put("name", order.getName());
+        response.put("price", order.getPrice());
+        response.put("description", order.getDescription());
+        response.put("date", order.getDate());
+        //response.put("daysOrdered", order.getDaysordered());
+        response.put("userId", order.getUser().getId());
+        response.put("username", order.getUser().getUsername());
+        response.put("isactive", order.getIsactive());
+        return response;
+    }).toList();
+}
+
 
     @PreAuthorize("hasAuthority('ROLE_USER')")
     @CrossOrigin(origins = "*")
     @PostMapping
-    public void resisterOrder(@RequestBody OrderModel order)
-    {
-         orderService.addNewOrder(order);
+    public void registerOrder(@RequestBody OrderRequestDto orderRequest) {
+        orderService.addNewOrder(orderRequest);
     }
 
     @PreAuthorize("hasAuthority('ROLE_USER')")
@@ -42,15 +63,14 @@ public class OrderController {
         orderService.deleteOrder(id);
     }
 
+
+
     @PreAuthorize("hasAuthority('ROLE_USER')")
     @CrossOrigin(origins = "*")
-    @PutMapping(path = "{orderid}")
-    public void updateOrder(@PathVariable("orderid") Long id,
-                            @RequestParam(required = false) String name,
-                            @RequestParam(required = false) Long price,
-                            @RequestParam(required = false) String description)
-    {
-        orderService.updateOrder(id,name,price,description);
+    @PutMapping(path = "{orderId}")
+    public void updateOrder(@PathVariable("orderId") Long id,
+                            @RequestBody OrderRequestDto orderRequest) {
+        orderService.updateOrder(id, orderRequest);
     }
 
 }
