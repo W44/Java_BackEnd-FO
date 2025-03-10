@@ -25,6 +25,19 @@ public class OrderService {
      public List<OrderModel> getAllOrders() {
         return orderRepository.findAll();
     }
+    public List<OrderModel> getActiveOrders() {
+        return orderRepository.findByIsactiveTrue();
+    }
+    public List<OrderModel> getPastOrders() {
+        return orderRepository.findByIsactiveFalse();
+    }
+     public long getCurrentOrdersCount(Integer userId) {
+        return orderRepository.countByUser_IdAndIsactiveTrue(userId);
+    }
+
+    public long getPastOrdersCount(Integer userId) {
+        return orderRepository.countByUser_IdAndIsactiveFalse(userId);
+    }
 
     public List<OrderModel> getOrdersByUser(Integer userId) {
         return orderRepository.findByUser_Id(userId);
@@ -74,5 +87,13 @@ public class OrderService {
         if (orderRequest.getDescription() != null && !orderRequest.getDescription().isEmpty()) {
             order.setDescription(orderRequest.getDescription());
         }
+        order.setIsactive(orderRequest.getIsactive());
+    }
+    @Transactional
+    public void completeOrder(Long id)
+    {
+        OrderModel order = orderRepository.findById(id)
+                .orElseThrow(() -> new IllegalStateException("Order with ID: " + id + " does not exist"));
+        order.setIsactive(false);
     }
 }

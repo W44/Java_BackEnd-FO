@@ -2,6 +2,7 @@ com/example/demo/Orders/OrderConfig.class
 com/example/demo/Authentication/SecurityConfig.class
 com/example/demo/DTO/AuthRequestDto.class
 com/example/demo/Orders/OrderController.class
+com/example/demo/DTO/OrderCountResponseDto.class
 com/example/demo/Authentication/JwtRequestFilter.class
 com/example/demo/Orders/OrderService.class
 com/example/demo/Authentication/CustomUserDetailsService.class
