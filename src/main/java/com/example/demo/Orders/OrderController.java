@@ -1,11 +1,11 @@
 package com.example.demo.Orders;
 
 
+import com.example.demo.DTO.OrderCompleteDto;
 import com.example.demo.DTO.OrderCountResponseDto;
 import com.example.demo.DTO.OrderRequestDto;
 import com.example.demo.Models.OrderModel;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -88,6 +88,8 @@ public class OrderController {
             //response.put("daysOrdered", order.getDaysordered());
             response.put("userId", order.getUser().getId());
             response.put("username", order.getUser().getUsername());
+            response.put("ocUser", order.getOcUser());
+            response.put("ocUid", order.getOcUid());
             response.put("isactive", order.getIsactive());
             return response;
         }).toList();
@@ -119,8 +121,8 @@ public class OrderController {
     @PreAuthorize("hasAuthority('ROLE_USER')")
     @CrossOrigin(origins = "*")
     @PutMapping(path = "complete/{orderId}")
-    public void completeOrder(@PathVariable("orderId") Long id) {
-        orderService.completeOrder(id);
+    public void completeOrder(@PathVariable("orderId") Long id, @RequestBody OrderCompleteDto orderCompleteDto) {
+        orderService.completeOrder(id, orderCompleteDto.getOcUid(), orderCompleteDto.getOcUser());
     }
 
     @PreAuthorize("hasAuthority('ROLE_USER')")

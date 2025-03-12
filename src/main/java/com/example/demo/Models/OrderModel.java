@@ -22,6 +22,24 @@ public class OrderModel {
     private Long price;
     private String description;
     private LocalDate date;
+    private String ocUser;
+    private Long ocUid;
+
+    public Long getOcUid() {
+        return ocUid;
+    }
+
+    public String getOcUser() {
+        return ocUser;
+    }
+
+    public void setOcUser(String ocUser) {
+        this.ocUser = ocUser;
+    }
+
+    public void setOcUid(Long ocUid) {
+        this.ocUid = ocUid;
+    }
 
     @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
     private boolean isactive;

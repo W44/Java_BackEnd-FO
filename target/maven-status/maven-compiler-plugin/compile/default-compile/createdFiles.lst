@@ -1,4 +1,5 @@
 com/example/demo/Orders/OrderConfig.class
+com/example/demo/DTO/OrderCompleteDto.class
 com/example/demo/Authentication/SecurityConfig.class
 com/example/demo/DTO/AuthRequestDto.class
 com/example/demo/Orders/OrderController.class

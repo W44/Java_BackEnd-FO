@@ -90,10 +90,16 @@ public class OrderService {
         order.setIsactive(orderRequest.getIsactive());
     }
     @Transactional
-    public void completeOrder(Long id)
+    public void completeOrder(Long id, Long ocUId, String ocUser)
     {
         OrderModel order = orderRepository.findById(id)
                 .orElseThrow(() -> new IllegalStateException("Order with ID: " + id + " does not exist"));
+        if (ocUser != null && !ocUser.isEmpty()) {
+            order.setOcUser(ocUser);
+        }
+        if (ocUId != null && ocUId > 0) {
+            order.setOcUid(ocUId);
+        }
         order.setIsactive(false);
     }
 }
