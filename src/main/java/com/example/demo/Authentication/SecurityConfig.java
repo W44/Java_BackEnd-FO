@@ -58,6 +58,7 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtRequestFilt
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/api/v1/authenticate").permitAll()
             .requestMatchers("/api/v1/register").permitAll()
+            .requestMatchers("/chat-websocket/**").permitAll()
             //.requestMatchers("/api/v1/**").permitAll() // Allow public endpoints
             .anyRequest().authenticated()
         )
